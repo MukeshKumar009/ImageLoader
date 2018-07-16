@@ -62,7 +62,7 @@ public class ItemRecyclerViewAdapter  extends RecyclerView.Adapter<MyViewHolder>
             //if not available in cache.
             Picasso.with(mContext).load(listItemCanada.get(position).imageUrl).into(holder.mImage);
         }{
-            //Image Preview not available
+            //Image Preview not available, dont set any Image
         }
     }
 
