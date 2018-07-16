@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ImageLoaderExp</string>
+    <string name="webservice_url">"https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"</string>
+    <string name="text_getting_json">"Getting json data..."</string>
+    <string name="action_refresh">"Refresh"</string>
+
+</resources>
