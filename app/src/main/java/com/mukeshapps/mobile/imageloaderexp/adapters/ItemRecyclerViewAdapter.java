@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Mukesh on 7/16/2018.
+ * Used to display each item in a row, set data for each view in {@link #onBindViewHolder(MyViewHolder, int)}
+ * Receive data {@link #listItemCanada} in constructor {@link #ItemRecyclerViewAdapter(Context, ArrayList)}
  */
 
 public class ItemRecyclerViewAdapter  extends RecyclerView.Adapter<MyViewHolder>{
@@ -24,13 +26,14 @@ public class ItemRecyclerViewAdapter  extends RecyclerView.Adapter<MyViewHolder>
     ArrayList<ItemCanada> listItemCanada;
 
     public ItemRecyclerViewAdapter(Context context, ArrayList<ItemCanada> listItemCanada){
-
+        //Assign values to list and context
         this.mContext = context;
         this.listItemCanada = listItemCanada;
 
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //set layout for each rows here
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_row_item, parent, false);
         return new MyViewHolder(view);
@@ -39,7 +42,7 @@ public class ItemRecyclerViewAdapter  extends RecyclerView.Adapter<MyViewHolder>
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        //check if title is not "null". I have check string "null", because webservice is returning String not null
+        //check if title is not "null". I have checked string "null", because webservice is returning String value "null" not null
         if (!listItemCanada.get(position).title.equals("null")) {
             holder.mTextTitle.setText(listItemCanada.get(position).title);
         }else {
@@ -55,7 +58,7 @@ public class ItemRecyclerViewAdapter  extends RecyclerView.Adapter<MyViewHolder>
 
         //Only set image if url is not "null"
         if (!listItemCanada.get(position).imageUrl.equals("null")) {
-            // I have used Pisacco library to load images from URL. Picasso also caches data in device and only loads if
+            // I have used Pisacco library to load images from URL. Picasso also caches data in device and only loads its
             //if not available in cache.
             Picasso.with(mContext).load(listItemCanada.get(position).imageUrl).into(holder.mImage);
         }{
@@ -69,6 +72,10 @@ public class ItemRecyclerViewAdapter  extends RecyclerView.Adapter<MyViewHolder>
     }
 }
 
+/**
+ * This class will define the Views of each items in a row.
+ * Initialize view here for each View holder
+ */
 class MyViewHolder extends RecyclerView.ViewHolder {
 
     public final View mView;
