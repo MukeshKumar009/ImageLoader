@@ -2,6 +2,7 @@ package com.mukeshapps.mobile.imageloaderexp;
 
 import org.junit.Test;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
 
 /**
