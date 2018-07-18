@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.mukeshapps.mobile.imageloaderexp.R;
 import com.mukeshapps.mobile.imageloaderexp.models.ItemCanada;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class ItemRecyclerViewAdapter  extends RecyclerView.Adapter<MyViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         //check if title is not "null". I have checked string "null", because webservice is returning String value "null" not null
         if (!listItemCanada.get(position).title.equals("null")) {
@@ -56,13 +57,28 @@ public class ItemRecyclerViewAdapter  extends RecyclerView.Adapter<MyViewHolder>
 
         }
 
-        //Only set image if url is not "null"
+        //Set image by using Picasso library
         if (!listItemCanada.get(position).imageUrl.equals("null")) {
-            // I have used Pisacco library to load images from URL. Picasso also caches data in device and only loads its
+            // I have used Picasso library to load images from URL. Picasso also caches data in device and only loads its
             //if not available in cache.
-            Picasso.with(mContext).load(listItemCanada.get(position).imageUrl).into(holder.mImage);
-        }{
-            //Image Preview not available, dont set any Image
+            Picasso.with(mContext)
+                    .load(listItemCanada.get(position).imageUrl)
+                    .placeholder( R.drawable.progress_animation )
+                    .into(holder.mImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+                        @Override
+                        public void onError() {
+                            //Image failed to load or not found, set default image
+                            holder.mImage.setImageResource(R.drawable.image_default);
+                        }
+
+                    });
+        }else {
+            //Image Preview not available, set default image
+            holder.mImage.setImageResource(R.drawable.image_default);
         }
     }
 

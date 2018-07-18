@@ -10,12 +10,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.mukeshapps.mobile.imageloaderexp.R;
 import com.mukeshapps.mobile.imageloaderexp.SetView;
 import com.mukeshapps.mobile.imageloaderexp.adapters.ItemRecyclerViewAdapter;
 import com.mukeshapps.mobile.imageloaderexp.models.ItemCanada;
 import com.mukeshapps.mobile.imageloaderexp.network.GetJsonDataClass;
+import com.mukeshapps.mobile.imageloaderexp.network.NetworkStatusClass;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -85,6 +87,10 @@ public class MainActivity extends AppCompatActivity implements SetView{
 
         //Perform refresh action
         if (id == R.id.action_refresh) {
+            //clear old data
+            mListItemCanada.clear();
+            mAdapter.notifyDataSetChanged();
+            //load new data
             loadJsonData();
             return true;
         }
@@ -97,15 +103,26 @@ public class MainActivity extends AppCompatActivity implements SetView{
      * json. Once we have image urls we can load images using Picasso library to set in adapter lazily.
      */
     private void loadJsonData(){
-        //Perform the doInBackground method, passing in our url
-        dialog = new ProgressDialog(MainActivity.this);
-        dialog.setMessage(getString(R.string.text_getting_json));
-        dialog.show();
-        new GetJsonDataClass(this).execute(getString(R.string.webservice_url));
+        //Only continue if network is connected
+        if(NetworkStatusClass.isNetworkConnected(this)) {
+            //Perform the doInBackground method, passing in our url
+            dialog = new ProgressDialog(MainActivity.this);
+            dialog.setMessage(getString(R.string.text_getting_json));
+            dialog.setCancelable(false);
+            dialog.show();
+            GetJsonDataClass.requestJsonFeed(this,getString(R.string.webservice_url));
+        }else {
+            //Prompt user to connect to network
+            Toast.makeText(this,getString(R.string.toast_network_error), Toast.LENGTH_SHORT).show();
+        }
     }
-
     @Override
     public void setListData(String jsonString) {
+        //Don't parse json if webservice returns null value
+        if (jsonString == null){
+            Toast.makeText(this,"Error in loading json data !!",Toast.LENGTH_SHORT).show();
+            return;
+        }
         //clear old values
         mListItemCanada.clear();
         //Parse json data
